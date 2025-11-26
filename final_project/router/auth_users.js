@@ -46,6 +46,45 @@ const authenticatedUser = (username,password)=>{ //returns boolean
   }
 }
 
+const usernameExists = (username, password)=>{
+  if (!username) {
+    console.error("ERROR - Username not provided!");
+    return false;
+  }
+
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].username === username && users[i].password === password) {
+      console.log("Username " + username + " exists!");
+      return true;
+    }
+  }
+
+  console.error("ERROR - Username does not exist!");
+  return false;
+}
+
+const checkUserExists = (username,password)=> {
+  if (!username && !password) {
+    console.error("ERROR - Username and Password not provided!");
+  }
+  else if (!username) {
+    console.error("ERROR - Username not provided!");
+    return false;
+  }
+  else if (!password) {
+    console.error("ERROR - Password not provided!");
+    return false;
+  }
+
+  if (usernameExists(username, password)) {
+    return true;
+  }
+  else {
+    console.log("User not registered and doesn't exist.");
+    return false;
+  }
+}
+
 //only registered users can login
 regd_users.post("/login", (req,res) => {
   //Write your code here
@@ -56,7 +95,7 @@ regd_users.post("/login", (req,res) => {
     return res.status(404).json({ message: "Error logging in" });
   }
 
-  if (authenticatedUser(username, password)) {
+  if (checkUserExists(username, password)) {
     let accessToken = jwt.sign({
       username: username
      }, 'access', { expiresIn: 60 * 60 });

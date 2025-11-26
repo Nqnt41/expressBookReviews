@@ -20,14 +20,6 @@ public_users.post("/register", (req,res) => {
   // Authenticate user
   if (authenticatedUser(username, password)) {
     // Generate JWT access token
-    let accessToken = jwt.sign({
-      username: username
-    }, 'access', { expiresIn: 60 * 60 });
-
-    req.session.authorization = {
-      accessToken
-    }
-
     users.push({username: username, password: password});
     return res.status(200).send("User " + username + " successfully registered\n");
   } 
